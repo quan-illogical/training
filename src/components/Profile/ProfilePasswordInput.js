@@ -1,7 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 import {Form} from "react-bootstrap"
+import Eye from "../../images/Suche04.svg";
 
 export default function ProfilePasswordInput(props) {
+  const [visible, setVisible] = useState(false);
+  const EyeIcon = () => {
+    const showPassword = () => {
+      setVisible(!visible);
+    };
+    return (
+      <img onClick={() => showPassword()} className="eye" src={Eye} alt="Eye" />
+    );
+  };
   return (
     <Form.Group>
       <Form.Label>
@@ -9,9 +19,10 @@ export default function ProfilePasswordInput(props) {
       </Form.Label>
       <Form.Control
         className="profile-input"
-        type="password"
+        type={visible ? "text" : "password"}
         placeholder={props.placeholder || "Enter your password"}
       />
+      <EyeIcon />
     </Form.Group>
   );
 }

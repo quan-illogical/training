@@ -4,6 +4,8 @@ import ProfileTextInput from "../components/Profile/ProfileTextInput";
 import ProfileEmailInput from "../components/Profile/ProfileEmailInput";
 import ProfilePasswordInput from "../components/Profile/ProfilePasswordInput";
 import profile_photo from "../images/meme-doge.jpg";
+import FormButtonFill from "../components/FormButtonFill";
+import FormButtonOutline from "../components/FormButtonOutline";
 
 export default function Profile() {
   return (
@@ -17,23 +19,72 @@ export default function Profile() {
 
       <Form className="form">
         <Container bsPrefix="container">
+          
+          {/* START section 1 (Profile info) */}
+
           <div className="profile-container">
             <img
               src={profile_photo}
               alt="Profile"
               className="rounded-circle profile-pic"
             />
+            <div></div>
             <h1>Mr. doge</h1>
           </div>
-          <ProfileTextInput label="Full name" placeholder="Enter your full name" />
+
           <Row noGutters={true}>
-            <Col xl>
+            <Col xl={6}>
+              <ProfileTextInput
+                label="Full name"
+                placeholder="Enter your full name"
+              />
+            </Col>
+          </Row>
+
+          <Row noGutters={true}>
+            <Col xl={6}>
               <ProfileEmailInput />
             </Col>
-            <Col xl>
+            <Col xl={6}>
               <ProfileTextInput label="Phone" placeholder="Enter your phone" />
             </Col>
           </Row>
+          {/* END section 1 */}
+          
+          {/* Section divider */}
+          <Row noGutters={true}>
+            <Col xl={12} >
+              <div className="section-divider">Change password</div>
+            </Col>
+          </Row>
+          {/* Section divider */}
+
+          {/* START section 2 (Password change) */}
+
+          <Row noGutters={true}>
+            <Col xl={6}>
+              <ProfilePasswordInput
+                label="Current password"
+                placeholder="Enter your password"
+              />
+            </Col>
+          </Row>
+
+          <Row noGutters={true}>
+            <Col xl={6}>
+              <ProfilePasswordInput label="New password" placeholder="Enter your new password" />
+            </Col>
+            <Col xl={6}>
+              <ProfilePasswordInput label="Confirm password" placeholder="Enter your password" />
+            </Col>
+          </Row>
+          {/* END section 2 */}
+
+          <div className="form-buttons">
+            <FormButtonFill content="Save" class="btn-profile-fill"/>
+            <FormButtonOutline content="Log out"class="btn-profile-outline"/>
+          </div>
+
         </Container>
       </Form>
     </div>

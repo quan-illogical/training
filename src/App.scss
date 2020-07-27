@@ -57,49 +57,101 @@ $button-color: #bd10e0;
     margin-bottom: 0;
   }
 
-  .container::after {
-    height: 2px;
-    opacity: 0.4;
-    border: solid 1px black;
-  }
+  .container {
+    .profile-container {
+      margin-top: 53px;
+      display: flex;
+      .profile-pic {
+        width: 60px;
+        height: 60px;
+      }
+      div {
+        &::after {
+          content: url(./images/edit_photo.svg);
+          cursor: pointer;
+          width: 33px;
+          height: 33px;
+          position: relative;
+          top:-20%;
+          left: -50%;
+        }
+      }
+    }
 
-  .profile-container {
-    margin-top: 53px;
-    display: flex;
-    .profile-pic {
-      width: 60px;
+    .section-divider {
+      border-top: 2px solid #bfc2d3;
+      opacity: 0.4;
+      width: 95%;
+      padding-top: 23px;
+      margin-bottom: 14px;
+    }
+
+    .profile-input {
+      width: 90%;
       height: 60px;
+      opacity: 0.7;
+      border-radius: 4px;
+      border: solid 1px #212020;
     }
-    h1 {
-      margin-left: 20px;
-    }
-    .profile-pic::after {
-      content: url(./images/edit_photo.svg);
-      position: absolute;
+
+    .profile-input-label {
+      position: relative;
       z-index: 2;
+      top: 15px;
+      text-align: center;
+      padding-left: 10px;
+      padding-right: 10px;
+      height: 20px;
+      font-size: 16px;
+      color: #212020;
+      background-color: #ffffff;
     }
 
-  }
-
-  .profile-input {
-    width: 462px;
-    height: 60px;
-    opacity: 0.7;
-    border-radius: 4px;
-    border: solid 1px #212020;
-  }
-
-  .profile-input-label {
-    position: relative;
-    z-index: 2;
-    top: 15px;
-    text-align: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    height: 20px;
-    font-size: 16px;
-    color: #212020;
-    background-color: #ffffff;
+    .eye {
+      position: relative;
+      right: -82%;
+      top: -43px;
+      width: 27px;
+      height: 18px;
+      opacity: 1;
+      background-color: #ffffff;
+    }
+    .form-buttons {
+      justify-content: start;
+      .btn-profile-fill {
+        margin-right: 35px;
+        width: 133px;
+        height: 60px;
+        font-size: 24px;
+        border-radius: 30px;
+        box-shadow: 0 10px 20px 0 rgba(189, 16, 224, 0.3);
+        background-color: $button-color;
+        color: #ffffff;
+        font-weight: 600;
+        &:hover {
+          background-color: rgba(255, 255, 255, 0);
+          color: $button-color;
+        }
+      }
+      .btn-profile-outline {
+        margin-right: 35px;
+        width: 180px;
+        height: 60px;
+        border-radius: 30px;
+        border: solid 2px $button-color;
+        background-color: rgba(255, 255, 255, 0);
+        color: $button-color;
+        font-size: 24px;
+        font-weight: 600;
+        &:hover {
+          color: #ffffff;
+          background-color: $button-color;
+        }
+        @media all and (max-width: 280px) {
+          font-size: 20px;
+        }
+      }
+    }
   }
 
   .base {
@@ -151,10 +203,10 @@ $button-color: #bd10e0;
       background-color: rgba(255, 255, 255, 0);
       color: $button-color;
       font-weight: 600;
-    }
-    .btn-outline:hover {
-      color: #ffffff;
-      background-color: $button-color;
+      &:hover {
+        color: #ffffff;
+        background-color: $button-color;
+      }
     }
     .btn-fill {
       width: 160px;
@@ -164,10 +216,10 @@ $button-color: #bd10e0;
       background-color: $button-color;
       color: #ffffff;
       font-weight: 600;
-    }
-    .btn-fill:hover {
-      background-color: rgba(255, 255, 255, 0);
-      color: $button-color;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0);
+        color: $button-color;
+      }
     }
   }
 
@@ -177,6 +229,7 @@ $button-color: #bd10e0;
     background-color: #dfe2e6;
   }
   span {
+    margin-left: 11px;
     font-size: 14px;
     font-weight: 600;
     font-stretch: normal;
@@ -192,24 +245,6 @@ $button-color: #bd10e0;
     }
     .eye {
       right: -17rem;
-    }
-  }
-
-  @media all and (max-width: 450px) {
-    .profile-input {
-      width: 380px;
-    }
-  }
-
-  @media all and (max-width: 375px) {
-    .profile-input {
-      width: 290px;
-    }
-  }
-
-  @media all and (max-width: 280px) {
-    .profile-input {
-      width: 240px;
     }
   }
 }
