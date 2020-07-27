@@ -14,6 +14,7 @@ export default function ProfileEmailInput(props) {
         className="profile-input"
         type="email"
         placeholder={props.placeholder || "Enter your email"}
+        defaultValue={props.defaultValue || null}
         onChange={(e) => {
           dispatch({
             type: dispatchType,

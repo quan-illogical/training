@@ -6,12 +6,14 @@ import FormButtonFill from "../components/FormButtonFill";
 import EmailInput from "../components/EmailInput";
 import PasswordInput from "../components/PasswordInput";
 import FormCheckBox from "../components/FormCheckBox";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
+import {useHistory} from "react-router-dom"
 
 export default function Login() {
-  let user = localStorage.getItem("name");
-
+  const history = useHistory();
+  const dispatch = useDispatch()
   const state = useSelector((state) => state);
   const handleOutlineClick = () => {
     window.location.href = "/register";
@@ -30,8 +32,24 @@ export default function Login() {
           "Access-Control-Allow-Origin": "*",
         },
       });
-      localStorage.setItem("token", res.data.token);
-      window.location.href = "/profile";
+      let user = jwt_decode(res.data.token);
+      dispatch({ type: "PROFILE-NAME", payload: localStorage.getItem("name") });
+      dispatch({
+        type: "PROFILE-EMAIL",
+        payload: localStorage.getItem("email"),
+      });
+      dispatch({
+        type: "PROFILE-PHONE",
+        payload: localStorage.getItem("phone"),
+      });
+      dispatch({ type: "AUTHORIZE"});
+      // localStorage.setItem("name", user.name)
+      // localStorage.setItem("email", user.email)
+      // localStorage.setItem("phone", user.phone)
+      // localStorage.setItem("id", user.id)
+      // localStorage.setItem("auth", true)
+      history.push("/profile")
+      console.log(user);
     } catch (error) {
       console.log(error.message);
     }
@@ -40,12 +58,12 @@ export default function Login() {
     <div className="login">
       <div className="form">
         <Brand />
-        {user !== null ? (
+        {/* {user !== null ? (
           <div style={{color: "#6ab04c"}}>
             Hello {user}! You've just recently made an account, and now you can
             login!
           </div>
-        ) : null}
+        ) : null} */}
         <div>
           <Form className="login-form">
             <EmailInput dispatchType="EMAIL" />

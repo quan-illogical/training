@@ -6,9 +6,11 @@ import ProfilePasswordInput from "../components/Profile/ProfilePasswordInput";
 import profile_photo from "../images/meme-doge.jpg";
 import FormButtonFill from "../components/FormButtonFill";
 import FormButtonOutline from "../components/FormButtonOutline";
+import {useSelector, useDispatch} from "react-redux"
 
 export default function Profile() {
-  let user = localStorage.getItem("name");
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user)
 
   return (
     <div>
@@ -31,7 +33,7 @@ export default function Profile() {
               className="rounded-circle profile-pic"
             />
             <div onClick={()=>{console.log("Hey")}}></div>
-            <h1>{ user || "Mr. doge"}</h1>
+            <h1>{ user.name || "LOADING..."}</h1>
           </div>
 
           <Row noGutters={true}>
@@ -39,16 +41,18 @@ export default function Profile() {
               <ProfileTextInput
                 label="Full name"
                 placeholder="Enter your full name"
+                dispatchType="PROFILE-NAME"
+                defaultValue={user.name}
               />
             </Col>
           </Row>
 
           <Row noGutters={true}>
             <Col xl={6}>
-              <ProfileEmailInput />
+              <ProfileEmailInput dispatchType="PROFILE-EMAIL" defaultValue={user.email} />
             </Col>
             <Col xl={6}>
-              <ProfileTextInput label="Phone" placeholder="Enter your phone" />
+              <ProfileTextInput label="Phone" placeholder="Enter your phone" dispatchType="PROFILE-PHONE" defaultValue={user.phone} />
             </Col>
           </Row>
           {/* END section 1 */}
@@ -68,16 +72,17 @@ export default function Profile() {
               <ProfilePasswordInput
                 label="Current password"
                 placeholder="Enter your password"
+                dispatchType="PROFILE-CURRENT-PASSWORD"
               />
             </Col>
           </Row>
 
           <Row noGutters={true}>
             <Col xl={6}>
-              <ProfilePasswordInput label="New password" placeholder="Enter your new password" />
+              <ProfilePasswordInput label="New password" placeholder="Enter your new password" dispatchType="PROFILE-NEW-PASSWORD" />
             </Col>
             <Col xl={6}>
-              <ProfilePasswordInput label="Confirm password" placeholder="Enter your password" />
+              <ProfilePasswordInput label="Confirm password" placeholder="Enter your password" dispatchType="PROFILE-CONFIRM-PASSWORD" />
             </Col>
           </Row>
           {/* END section 2 */}

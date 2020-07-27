@@ -14,6 +14,7 @@ export default function ProfileTextInput(props) {
         className="profile-input"
         type="text"
         placeholder={props.placeholder || "Enter your text"}
+        defaultValue={props.defaultValue || null}
         onChange={(e) => {
           dispatch({
             type: dispatchType,

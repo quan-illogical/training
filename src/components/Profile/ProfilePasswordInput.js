@@ -24,6 +24,7 @@ export default function ProfilePasswordInput(props) {
         className="profile-input"
         type={visible ? "text" : "password"}
         placeholder={props.placeholder || "Enter your password"}
+        defaultValue={props.defaultValue || null}
         onChange={(e) => {
           dispatch({
             type: dispatchType,
