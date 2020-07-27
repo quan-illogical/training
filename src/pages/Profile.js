@@ -8,6 +8,8 @@ import FormButtonFill from "../components/FormButtonFill";
 import FormButtonOutline from "../components/FormButtonOutline";
 
 export default function Profile() {
+  let user = localStorage.getItem("name");
+
   return (
     <div>
       <Navbar bsPrefix="profile-navbar" variant="dark">
@@ -28,8 +30,8 @@ export default function Profile() {
               alt="Profile"
               className="rounded-circle profile-pic"
             />
-            <div></div>
-            <h1>Mr. doge</h1>
+            <div onClick={()=>{console.log("Hey")}}></div>
+            <h1>{ user || "Mr. doge"}</h1>
           </div>
 
           <Row noGutters={true}>
