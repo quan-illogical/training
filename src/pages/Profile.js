@@ -6,10 +6,9 @@ import ProfilePasswordInput from "../components/Profile/ProfilePasswordInput";
 import profile_photo from "../images/meme-doge.jpg";
 import FormButtonFill from "../components/FormButtonFill";
 import FormButtonOutline from "../components/FormButtonOutline";
-import {useSelector, useDispatch} from "react-redux"
+import {useSelector} from "react-redux"
 
 export default function Profile() {
-  const dispatch = useDispatch();
   const user = useSelector(state => state.user)
 
   return (

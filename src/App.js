@@ -9,10 +9,9 @@ import {
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 function App() {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
   const ProtectedRoute = (props) => {
@@ -31,13 +30,13 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/register" component={Register} />
-        <Route path="/login" component={Login} />
-        <Route path="/" component={Login} />
         <ProtectedRoute
           path="/profile"
           render={(props) => <Profile {...props} />}
         />
+        <Route path="/register" component={Register} />
+        <Route path="/login" component={Login} />
+        <Route path="/" component={Login} />
       </Switch>
     </Router>
   );

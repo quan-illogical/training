@@ -9,11 +9,11 @@ import FormCheckBox from "../components/FormCheckBox";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import {useHistory} from "react-router-dom"
+import { useHistory } from "react-router-dom";
 
 export default function Login() {
   const history = useHistory();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const handleOutlineClick = () => {
     window.location.href = "/register";
@@ -33,22 +33,17 @@ export default function Login() {
         },
       });
       let user = jwt_decode(res.data.token);
-      dispatch({ type: "PROFILE-NAME", payload: localStorage.getItem("name") });
+      dispatch({ type: "PROFILE-NAME", payload: user.name });
       dispatch({
         type: "PROFILE-EMAIL",
-        payload: localStorage.getItem("email"),
+        payload: user.email,
       });
       dispatch({
         type: "PROFILE-PHONE",
-        payload: localStorage.getItem("phone"),
+        payload: user.phone,
       });
-      dispatch({ type: "AUTHORIZE"});
-      // localStorage.setItem("name", user.name)
-      // localStorage.setItem("email", user.email)
-      // localStorage.setItem("phone", user.phone)
-      // localStorage.setItem("id", user.id)
-      // localStorage.setItem("auth", true)
-      history.push("/profile")
+      dispatch({ type: "AUTHORIZE" });
+      history.push("/profile");
       console.log(user);
     } catch (error) {
       console.log(error.message);
@@ -58,12 +53,6 @@ export default function Login() {
     <div className="login">
       <div className="form">
         <Brand />
-        {/* {user !== null ? (
-          <div style={{color: "#6ab04c"}}>
-            Hello {user}! You've just recently made an account, and now you can
-            login!
-          </div>
-        ) : null} */}
         <div>
           <Form className="login-form">
             <EmailInput dispatchType="EMAIL" />
