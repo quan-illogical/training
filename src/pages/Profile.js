@@ -10,7 +10,10 @@ import { useSelector } from "react-redux";
 
 export default function Profile() {
   const user = useSelector((state) => state.user);
-  const [disabled, setDisabled] = useState(false)
+  const [disabled, setDisabled] = useState(true)
+  console.log(user)
+  
+  
 
 
   const handleSubmit = async (e) => {

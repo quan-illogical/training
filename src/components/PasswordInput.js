@@ -31,12 +31,12 @@ export default function PasswordInput(props) {
         type={visible ? "text" : "password"}
         placeholder={props.placeholder || "Enter your password"}
         defaultValue={props.defaultValue || null}
-        onChange={(e) => {
+        onChange={props.onChange || ((e) => {
           dispatch({
             type: dispatchType,
             payload: e.target.value,
           });
-        }}
+        })}
       />
       <EyeIcon />
       <Form.Control.Feedback type="invalid">

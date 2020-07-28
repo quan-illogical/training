@@ -18,12 +18,12 @@ export default function EmailInput(props) {
         type="email"
         placeholder={props.placeholder || "Enter your email"}
         defaultValue={props.defaultValue || null}
-        onChange={(e) => {
+        onChange={props.onChange || ((e) => {
           dispatch({
             type: dispatchType,
             payload: e.target.value,
           });
-        }}
+        })}
       />
       <Form.Control.Feedback type="invalid">
         {props.error || "Invalid input"}
