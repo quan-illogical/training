@@ -3,18 +3,18 @@ import { Form } from "react-bootstrap";
 import {useDispatch} from "react-redux"
 
 export default function TextInput(props) {
-  
   const dispatch = useDispatch();
   let dispatchType = props.dispatchType;
   return (
     <Form.Group>
       <Form.Label>
-        <p>{props.label || "Text"}</p>
+        <p className={props.className_label || null}>{props.label || "Text"}</p>
       </Form.Label>
       <Form.Control
-        className="base email"
+        className={props.className || "base email"}
         type="text"
         placeholder={props.placeholder || "Enter your text"}
+        defaultValue={props.defaultValue || null}
         onChange={(e) => {
           dispatch({
             type: dispatchType,

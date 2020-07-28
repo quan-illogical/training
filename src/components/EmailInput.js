@@ -8,12 +8,13 @@ export default function EmailInput(props) {
   return (
     <Form.Group>
       <Form.Label>
-        <p>{props.label || "Email"}</p>
+        <p className={props.className_label || null}>{props.label || "Email"}</p>
       </Form.Label>
       <Form.Control
-        className="base email"
+        className={props.className || "base email"}
         type="email"
         placeholder={props.placeholder || "Enter your email"}
+        defaultValue={props.defaultValue || null}
         onChange={(e) => {
           dispatch({
             type: dispatchType,
@@ -21,6 +22,7 @@ export default function EmailInput(props) {
           });
         }}
       />
+      <Form.Control.Feedback>Hey</Form.Control.Feedback>
     </Form.Group>
   );
 }

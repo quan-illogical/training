@@ -18,28 +18,32 @@ export default function Register() {
     history.goBack();
   };
 
-  const handleFillClick = async () => {
-      if (state.password !== state.confirmPassword) {
-        alert("Confirm password does not match with password. Please try again")
-      } else {
-        const res = await axios({
-        method: "post",
-        url: "http://api.terralogic.ngrok.io/api/register",
-        data: JSON.stringify({
-          email: state.email,
-          password: state.password,
-          name: state.name,
-          phone: state.phone
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          'Access-Control-Allow-Origin': "*"
+  const handleFillClick = async (e) => {
+      e.preventDefault();
+      try {
+        if (state.password !== state.confirmPassword) {
+          alert("Confirm password does not match with password. Please try again")
+        } else {
+          const res = await axios({
+          method: "post",
+          url: "http://api.terralogic.ngrok.io/api/register",
+          data: JSON.stringify({
+            email: state.email,
+            password: state.password,
+            name: state.name,
+            phone: state.phone
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            'Access-Control-Allow-Origin': "*"
+          }
+        });
+        console.log(res)
         }
-      });
-      localStorage.setItem("name", res.data.data.name)
-      window.location.href="/login"
-      console.log(res)
+      } catch (error) {
+        alert(error.message)
       }
+      
   }
     
   
@@ -60,7 +64,7 @@ export default function Register() {
                 onClick={(e) => handleOutlineClick(e)}
                 type="button"
               />
-              <FormButtonFill content="Submit" type="button" onClick={handleFillClick} />
+              <FormButtonFill content="Submit" onClick={(e)=>handleFillClick(e)} />
             </div>
           </Form>
         </div>

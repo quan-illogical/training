@@ -8,7 +8,6 @@ $button-color: #bd10e0;
   width: 100vw;
   height: 100vh;
   background: #ffffff;
-  // margin: 138px auto auto 185px;
   margin-top: 4rem;
   display: flex;
   justify-content: space-around;
@@ -22,9 +21,6 @@ $button-color: #bd10e0;
   @media screen and (max-width: 1024px) {
     .solution-experts {
       display: none;
-    }
-    .form {
-      width: 300px;
     }
   }
 }
@@ -239,12 +235,19 @@ $button-color: #bd10e0;
     color: $label-color;
   }
 
-  @media screen and (max-width: 600px) {
+  @media all and (max-width: 600px) {
+    width: 300px;
     .base {
       width: 300px;
     }
     .eye {
       right: -17rem;
+    }
+  }
+  @media all and (max-width:300px) {
+    width: 280px;
+    .base {
+      width: 270px;
     }
   }
 }

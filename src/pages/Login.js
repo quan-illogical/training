@@ -18,7 +18,8 @@ export default function Login() {
   const handleOutlineClick = () => {
     window.location.href = "/register";
   };
-  const handleFillClick = async () => {
+  const handleFillClick = async (e) => {
+    e.preventDefault();
     try {
       const res = await axios({
         method: "post",
@@ -44,7 +45,6 @@ export default function Login() {
       });
       dispatch({ type: "AUTHORIZE" });
       history.push("/profile");
-      console.log(user);
     } catch (error) {
       console.log(error.message);
     }
@@ -66,8 +66,8 @@ export default function Login() {
               />
               <FormButtonFill
                 content="Login"
-                type="button"
-                onClick={handleFillClick}
+                type="submit"
+                onClick={(e) => handleFillClick(e)}
               />
             </div>
             <FormCheckBox />
