@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.scss";
 import {
   BrowserRouter as Router,
@@ -9,9 +9,12 @@ import {
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import store from "./redux/store"
+
 
 function App() {
+  const dispatch = useDispatch()
   const user = useSelector((state) => state.user);
 
   const ProtectedRoute = (props) => {
@@ -21,6 +24,11 @@ function App() {
       return <Redirect to="/login" />;
     }
   };
+
+  useEffect(()=> {
+    // dispatch({type: "AUTHORIZE", payload: localStorage.getItem(auth)})
+    console.log(store.getState().user)
+  })
 
   return (
     <Router>

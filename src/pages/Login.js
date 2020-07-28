@@ -34,6 +34,8 @@ export default function Login() {
         },
       });
       let user = jwt_decode(res.data.token);
+      localStorage.setItem("auth", true)
+      dispatch({type: "TOKEN", payload: res.data.token})
       dispatch({ type: "PROFILE-NAME", payload: user.name });
       dispatch({
         type: "PROFILE-EMAIL",
@@ -43,7 +45,8 @@ export default function Login() {
         type: "PROFILE-PHONE",
         payload: user.phone,
       });
-      dispatch({ type: "AUTHORIZE" });
+      dispatch({ type: "AUTHORIZE", payload: localStorage.getItem("auth") === "true" });
+      
       history.push("/profile");
     } catch (error) {
       console.log(error.message);

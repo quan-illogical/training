@@ -9,6 +9,7 @@ const initialState = {
     confirmPassword: "",
     name: "",
     phone: "",
+    token: "",
   },
   email: "",
   password: "",
@@ -52,7 +53,10 @@ function reducer(state = initialState, action) {
     state.user.confirmPassword = action.payload;
   }
   if (action.type === "AUTHORIZE") {
-    state.user.isAuthenticated = true;
+    state.user.isAuthenticated = action.payload;
+  }
+  if (action.type === "TOKEN") {
+    state.user.token = action.payload;
   }
   return state;
 }
