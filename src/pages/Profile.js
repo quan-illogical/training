@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Navbar, Form, Container, Row, Col } from "react-bootstrap";
 import TextInput from "../components/TextInput";
 import EmailInput from "../components/EmailInput";
@@ -10,6 +10,14 @@ import { useSelector } from "react-redux";
 
 export default function Profile() {
   const user = useSelector((state) => state.user);
+  const [disabled, setDisabled] = useState(false)
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Submitted!")
+  }
+
 
   return (
     <div>
@@ -118,7 +126,7 @@ export default function Profile() {
           {/* END section 2 */}
 
           <div className="form-buttons">
-            <FormButtonFill content="Save" class="btn-profile-fill" />
+            <FormButtonFill onClick={(e)=>handleSubmit(e)} type="submit" disabled = {disabled} content="Save" class="btn-profile-fill" />
             <FormButtonOutline content="Log out" class="btn-profile-outline" />
           </div>
         </Container>

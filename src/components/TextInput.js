@@ -1,6 +1,6 @@
 import React from "react";
 import { Form } from "react-bootstrap";
-import {useDispatch} from "react-redux"
+import { useDispatch } from "react-redux";
 
 export default function TextInput(props) {
   const dispatch = useDispatch();
@@ -11,6 +11,7 @@ export default function TextInput(props) {
         <p className={props.className_label || null}>{props.label || "Text"}</p>
       </Form.Label>
       <Form.Control
+        required
         className={props.className || "base email"}
         type="text"
         placeholder={props.placeholder || "Enter your text"}
@@ -18,10 +19,13 @@ export default function TextInput(props) {
         onChange={(e) => {
           dispatch({
             type: dispatchType,
-            payload: e.target.value
+            payload: e.target.value,
           });
         }}
       />
+      <Form.Control.Feedback type="invalid">
+        {props.error || "Invalid input"}
+      </Form.Control.Feedback>
     </Form.Group>
   );
 }

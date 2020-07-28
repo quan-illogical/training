@@ -3,7 +3,12 @@ import { Button } from "react-bootstrap";
 
 export default function FormButtonFill(props) {
   return (
-    <Button type={props.type || "submit"} className={props.class || "btn-fill"} onClick={props.onClick}>
+    <Button
+      disabled={props.disabled}
+      type={props.type || "submit"}
+      className={props.class || "btn-fill"}
+      onClick={props.onClick}
+    >
       {props.content}
     </Button>
   );

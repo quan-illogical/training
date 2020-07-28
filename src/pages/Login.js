@@ -23,7 +23,7 @@ export default function Login() {
     try {
       const res = await axios({
         method: "post",
-        url: "http://api.terralogic.ngrok.io/api/login",
+        url: process.env.REACT_APP_LOGIN,
         data: JSON.stringify({
           email: state.email,
           password: state.password,
@@ -55,8 +55,11 @@ export default function Login() {
         <Brand />
         <div>
           <Form className="login-form">
-            <EmailInput dispatchType="EMAIL" />
-            <PasswordInput dispatchType="PASSWORD" />
+            <EmailInput error="Invalid email" dispatchType="EMAIL" />
+            <PasswordInput
+              error="Please enter a password"
+              dispatchType="PASSWORD"
+            />
 
             <div className="form-buttons">
               <FormButtonOutline

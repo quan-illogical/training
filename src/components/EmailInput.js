@@ -8,9 +8,12 @@ export default function EmailInput(props) {
   return (
     <Form.Group>
       <Form.Label>
-        <p className={props.className_label || null}>{props.label || "Email"}</p>
+        <p className={props.className_label || null}>
+          {props.label || "Email"}
+        </p>
       </Form.Label>
       <Form.Control
+        required
         className={props.className || "base email"}
         type="email"
         placeholder={props.placeholder || "Enter your email"}
@@ -22,7 +25,9 @@ export default function EmailInput(props) {
           });
         }}
       />
-      <Form.Control.Feedback>Hey</Form.Control.Feedback>
+      <Form.Control.Feedback type="invalid">
+        {props.error || "Invalid input"}
+      </Form.Control.Feedback>
     </Form.Group>
   );
 }

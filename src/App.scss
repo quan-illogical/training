@@ -236,7 +236,7 @@ $button-color: #bd10e0;
   }
 
   @media all and (max-width: 600px) {
-    width: 300px;
+    // width: 300px;
     .base {
       width: 300px;
     }
@@ -247,7 +247,10 @@ $button-color: #bd10e0;
   @media all and (max-width:300px) {
     width: 280px;
     .base {
-      width: 270px;
+      width: 260px;
+    }
+    .eye {
+      right: -14rem;
     }
   }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.scss";
 import {
   BrowserRouter as Router,
@@ -21,11 +21,6 @@ function App() {
       return <Redirect to="/login" />;
     }
   };
-
-  useEffect(() => {
-    
-    console.log(user.isAuthenticated)
-  });
 
   return (
     <Router>

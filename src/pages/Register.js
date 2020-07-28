@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Brand from "../components/Brand";
 import { Form } from "react-bootstrap";
 import FormButtonOutline from "../components/FormButtonOutline";
@@ -7,11 +7,12 @@ import PasswordInput from "../components/PasswordInput";
 import EmailInput from "../components/EmailInput";
 import TextInput from "../components/TextInput";
 import { useHistory } from "react-router-dom";
-import axios from "axios"
-import {useSelector} from 'react-redux'
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default function Register() {
-  const state = useSelector(state => state)
+  const state = useSelector((state) => state);
+  const [validated, setValidated] = useState(false);
   let history = useHistory();
 
   const handleOutlineClick = () => {
@@ -19,52 +20,84 @@ export default function Register() {
   };
 
   const handleFillClick = async (e) => {
+    const form = e.currentTarget;
+    if (form.checkValidity()) {
+      console.log(form.checkValidity());
       e.preventDefault();
+    } else {
       try {
         if (state.password !== state.confirmPassword) {
-          alert("Confirm password does not match with password. Please try again")
+          alert(
+            "Confirm password does not match with password. Please try again"
+          );
         } else {
           const res = await axios({
-          method: "post",
-          url: "http://api.terralogic.ngrok.io/api/register",
-          data: JSON.stringify({
-            email: state.email,
-            password: state.password,
-            name: state.name,
-            phone: state.phone
-          }),
-          headers: {
-            "Content-Type": "application/json",
-            'Access-Control-Allow-Origin': "*"
-          }
-        });
-        console.log(res)
+            method: "post",
+            url: process.env.REACT_APP_REGISTER,
+            data: JSON.stringify({
+              email: state.email,
+              password: state.password,
+              name: state.name,
+              phone: state.phone,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
+          console.log(res);
         }
       } catch (error) {
-        alert(error.message)
+        alert(error.message);
       }
-      
-  }
-    
-  
+    }
+
+    setValidated(true);
+  };
+
   return (
     <div className="register">
       <div className="form">
         <Brand />
         <div>
-          <Form className="register-form">
-            <EmailInput dispatchType="EMAIL" />
-            <PasswordInput dispatchType="PASSWORD" />
-            <PasswordInput label="Confirm Password" dispatchType="CONFIRM_PASSWORD" />
-            <TextInput label="Full Name" placeholder="Enter your name" dispatchType="NAME"/>
-            <TextInput label="Phone" placeholder="Enter your phone number" dispatchType="PHONE"/>
+          <Form
+            noValidate
+            validated={validated}
+            onSubmit={handleFillClick}
+            className="register-form"
+          >
+            <EmailInput error="Email is invalid" dispatchType="EMAIL" />
+            <PasswordInput
+              error="Please enter a password"
+              dispatchType="PASSWORD"
+            />
+            <PasswordInput
+              error="Please confirm password"
+              label="Confirm Password"
+              dispatchType="CONFIRM_PASSWORD"
+            />
+            <TextInput
+              error="Please enter your name"
+              label="Full Name"
+              placeholder="Enter your name"
+              dispatchType="NAME"
+            />
+            <TextInput
+              error="Please enter a phone number"
+              label="Phone"
+              placeholder="Enter your phone number"
+              dispatchType="PHONE"
+            />
             <div className="form-buttons">
               <FormButtonOutline
                 content="Back"
                 onClick={(e) => handleOutlineClick(e)}
                 type="button"
               />
-              <FormButtonFill content="Submit" onClick={(e)=>handleFillClick(e)} />
+              <FormButtonFill
+                content="Submit"
+                onClick={(e) => handleFillClick(e)}
+              />
             </div>
           </Form>
         </div>
