@@ -9,7 +9,7 @@ export default function PasswordInput(props) {
   const [valid, setValid] = useState(false)
   const [invalid, setInvalid] = useState(false)
   const dispatch = useDispatch();
-  let dispatchType = props.dispatchType;
+  const dispatchType = props.dispatchType;
   const [visible, setVisible] = useState(false);
   const [eye, setEye] = useState(Eye1);
   const EyeIcon = () => {

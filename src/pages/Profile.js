@@ -4,8 +4,10 @@ import TextInput from "../components/TextInput";
 import EmailInput from "../components/EmailInput";
 import PasswordInput from "../components/PasswordInput";
 import profile_photo from "../images/meme-doge.jpg";
+import profile_btn from "../images/edit_photo.svg";
 import FormButtonFill from "../components/FormButtonFill";
 import FormButtonOutline from "../components/FormButtonOutline";
+import UploadModal from "../components/UploadModal";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
@@ -13,17 +15,23 @@ import NameValidator from "../services/NameValidator";
 import EmailValidator from "../services/EmailValidator";
 import PhoneValidator from "../services/PhoneValidator";
 import PasswordValidator from "../services/PasswordValidator";
+import jwt_decode from "jwt-decode";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Profile() {
   const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const [disabled, setDisabled] = useState(true);
-  const [validated, setValidated] = useState(false);
+  const [modal, setModal] = useState(false);
 
-  const userName = localStorage.getItem("name");
-  const userEmail = localStorage.getItem("email");
-  const userPhone = localStorage.getItem("phone");
+  const token = localStorage.getItem("token");
+  const decoded = jwt_decode(token);
+  const userName = decoded.name;
+  const userEmail = decoded.email;
+  const userPhone = decoded.phone;
+  const userPic = decoded.avatar;
 
   const handleChange = (e, dispatchType) => {
     dispatch({
@@ -31,12 +39,12 @@ export default function Profile() {
       payload: e.target.value,
     });
     if (
-      NameValidator({ str: user.name }) &&
-      EmailValidator({ str: user.email }) &&
-      PhoneValidator({ input: user.phone }) &&
-      PasswordValidator({ input: user.currentPassword }) &&
-      PasswordValidator({ input: user.newPassword }) &&
-      PasswordValidator({ input: user.confirmPassword })
+      (NameValidator({ str: user.name }) &&
+        EmailValidator({ str: user.email }) &&
+        PhoneValidator({ input: user.phone })) ||
+      (PasswordValidator({ input: user.currentPassword }) &&
+        PasswordValidator({ input: user.newPassword }) &&
+        PasswordValidator({ input: user.confirmPassword }))
     ) {
       setDisabled(false);
     } else setDisabled(true);
@@ -47,64 +55,133 @@ export default function Profile() {
     history.push("/login");
   };
 
+  const handleEditPhoto = async () => {
+    setModal(true);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { currentPassword, newPassword, confirmPassword } = user;
-    setValidated(true);
 
     if (
       user.name !== userName &&
       user.email !== userEmail &&
       user.phone !== userPhone
     ) {
-      const res = await axios({
-        method: "patch",
-        url: process.env.REACT_APP_UPDATE,
-        data: {
-          name: user.name,
-          email: user.email,
-          phone: user.phone,
-        },
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
+      if (
+        NameValidator({ str: user.name }) &&
+        EmailValidator({ str: user.email }) &&
+        PhoneValidator({ input: user.phone })
+      ) {
+        try {
+          const res = await axios({
+            method: "patch",
+            url: process.env.REACT_APP_UPDATE,
+            data: {
+              name: user.name,
+              email: user.email,
+              phone: user.phone,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
 
-      console.log(res);
+          console.log(res);
+        } catch (error) {
+          toast.error(error.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      }
     }
     if (
       currentPassword !== "" &&
       newPassword !== "" &&
       confirmPassword !== ""
     ) {
-      if (newPassword === confirmPassword) {
-        const res = await axios({
-          method: "post",
-          url: process.env.REACT_APP_CHANGE_PASSWORD,
-          data: {
-            password: newPassword,
-            currentPassword: currentPassword,
-          },
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
+      try {
+        if (newPassword === confirmPassword) {
+          const res = await axios({
+            method: "post",
+            url: process.env.REACT_APP_CHANGE_PASSWORD,
+            data: {
+              password: newPassword,
+              currentPassword: currentPassword,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
+          if (res.status === 1) {
+            toast.success("Successfully changed password", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          } else
+            toast.error("Password is incorrect", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+        } else {
+          toast.error("New password and confirm password must match", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      } catch (error) {
+        toast.error(error.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
         });
-        if (res.status === 1) {
-          alert("Successfully changed password");
-        } else alert("Wrong password");
-        console.log(res);
-      } else {
-        alert("New password and confirm password must match");
       }
     }
   };
 
   return (
     <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <UploadModal show={modal} onHide={() => setModal(false)} />
       <Navbar bsPrefix="profile-navbar" variant="dark">
         <div>
           <h1>My Profile</h1>
@@ -112,21 +189,23 @@ export default function Profile() {
         </div>
       </Navbar>
 
-      <Form noValidate validated={validated} className="form">
+      <Form className="form">
         <Container bsPrefix="container">
           {/* START section 1 (Profile info) */}
 
           <div className="profile-container">
             <img
-              src={profile_photo}
+              src={userPic || profile_photo}
               alt="Profile"
               className="rounded-circle profile-pic"
             />
-            <div
-              onClick={() => {
-                console.log("Hey");
-              }}
-            ></div>
+            <img
+              onClick={handleEditPhoto}
+              src={profile_btn}
+              alt="Profile"
+              className="profile-btn"
+            />
+
             <h1>{userName || null}</h1>
           </div>
 
@@ -178,7 +257,7 @@ export default function Profile() {
 
       {/* START section 2 (Password change) */}
 
-      <Form noValidate className="form">
+      <Form className="form">
         <Container bsPrefix="container">
           <Row noGutters={true}>
             <Col xl={6}>

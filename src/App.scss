@@ -3,7 +3,6 @@
 $label-color: #6b6c6f;
 $button-color: #bd10e0;
 
-
 .login,
 .register {
   width: 100vw;
@@ -45,8 +44,6 @@ $button-color: #bd10e0;
   }
 }
 
-
-
 .form {
   p {
     font-size: 12px;
@@ -55,9 +52,8 @@ $button-color: #bd10e0;
     margin-left: 10px;
     margin-bottom: 0;
   }
-  
+
   .container {
-    
     .profile-container {
       margin-top: 53px;
       display: flex;
@@ -65,20 +61,16 @@ $button-color: #bd10e0;
         width: 60px;
         height: 60px;
       }
+      .profile-btn {
+        cursor: pointer;
+        width: 33px;
+        height: 33px;
+        position: relative;
+        left: -2%;
+      }
       @media all and (max-width: 500px) {
         h1 {
           font-size: 24px;
-        }
-      }
-      div {
-        &::before {
-          content: url(./images/edit_photo.svg);
-          cursor: pointer;
-          width: 33px;
-          height: 33px;
-          position: relative;
-          top: -20%;
-          left: -50%;
         }
       }
     }
@@ -182,7 +174,6 @@ $button-color: #bd10e0;
     border: solid 1px #dfe2e6;
   }
 
-  
   .email {
     background-color: #ffffff;
     background-image: url(./images/Suche.svg);
@@ -191,8 +182,6 @@ $button-color: #bd10e0;
     background-position-y: 12px;
     text-indent: 30px;
   }
-  
-  
 
   .key {
     background-color: #ffffff;
@@ -212,14 +201,12 @@ $button-color: #bd10e0;
   }
 
   .invalid {
-    border: 1px solid black;
-    background-color: black;
-   }
-   
-   .valid {
-     border: 1px solid red;
-     background-color: red;
-   }
+    border: 1px solid #ff0000;
+  }
+
+  .valid {
+    border: 1px solid #00ff00;
+  }
 
   ::placeholder {
     color: #e1e4e8;
@@ -319,3 +306,22 @@ $button-color: #bd10e0;
   }
 }
 
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.7);
+  .spinner {
+    position: absolute;
+    z-index: 2;
+    top: 45%;
+    left: 45%;
+  }
+}
+
+.invalid-feedback {
+  max-width: 20rem !important;
+}

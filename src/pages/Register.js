@@ -9,10 +9,13 @@ import TextInput from "../components/TextInput";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Loading from "../components/Loading";
 
 export default function Register() {
+  const [loading, setLoading] = useState(false)
   const state = useSelector((state) => state);
-  const [validated, setValidated] = useState(false);
   let history = useHistory();
 
   const handleOutlineClick = () => {
@@ -20,62 +23,96 @@ export default function Register() {
   };
 
   const handleFillClick = async (e) => {
-    const form = e.currentTarget;
-    if (form.checkValidity() === false) {
-      console.log(form.checkValidity());
+    try {
       e.preventDefault();
-    } else {
-      try {
-        e.preventDefault();
-        if (state.password !== state.confirmPassword) {
-          alert(
-            "Confirm password does not match with password. Please try again"
-          );
-        } else {
-          const res = await axios({
-            method: "post",
-            url: process.env.REACT_APP_REGISTER,
-            data: JSON.stringify({
-              email: state.email,
-              password: state.password,
-              name: state.name,
-              phone: state.phone,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
+      setLoading(true)
+      if (state.password !== state.confirmPassword) {
+        toast.error("Confirm password does not match with password. Please try again", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
           });
-          if (res) {
-            history.push("/login");
-          }
-        }
-      } catch (error) {
-        alert(error.message);
+          setLoading(false)
+      } else {
+        const res = await axios({
+          method: "post",
+          url: process.env.REACT_APP_REGISTER,
+          data: JSON.stringify({
+            email: state.email,
+            password: state.password,
+            name: state.name,
+            phone: state.phone,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+        setLoading(false)
+        if (res.data.status === 1) {
+          toast.success('Successfully created an account!', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
+          history.push("/login");
+        } else toast.error("Must not leave any field empty", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });;
       }
+    } catch (error) {
+      setLoading(false)
+      toast.error(error.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
-
-    setValidated(true);
   };
 
   return (
     <div className="register">
       <div className="form">
+        {loading ? <Loading/> : null}
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <Brand />
         <div>
-          <Form
-            noValidate
-            validated={validated}
-            onSubmit={handleFillClick}
-            className="register-form"
-          >
+          <Form onSubmit={handleFillClick} className="register-form">
             <EmailInput error="Email is invalid" dispatchType="EMAIL" />
             <PasswordInput
-              error="Please enter a password"
+              error="Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
               dispatchType="PASSWORD"
             />
             <PasswordInput
-              error="Please confirm password"
+              error="Invalid confirmation"
               label="Confirm Password"
               dispatchType="CONFIRM_PASSWORD"
             />

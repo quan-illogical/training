@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.scss";
 import {
   BrowserRouter as Router,
@@ -9,7 +9,6 @@ import {
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
-import store from "./redux/store"
 
 
 function App() {
@@ -22,9 +21,7 @@ function App() {
     }
   };
 
-  useEffect(()=> {
-    console.log(store.getState().user)
-  })
+
 
   return (
     <Router>

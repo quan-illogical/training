@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Brand from "../components/Brand";
 import { Form } from "react-bootstrap";
 import FormButtonOutline from "../components/FormButtonOutline";
@@ -8,19 +8,23 @@ import PasswordInput from "../components/PasswordInput";
 import FormCheckBox from "../components/FormCheckBox";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
 import { useHistory } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Loading from "../components/Loading";
 
 export default function Login() {
+  const [loading, setLoading] = useState(false)
   const history = useHistory();
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const handleOutlineClick = () => {
-    window.location.href = "/register";
+    history.push("/register");
   };
   const handleFillClick = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       const res = await axios({
         method: "post",
         url: process.env.REACT_APP_LOGIN,
@@ -33,25 +37,56 @@ export default function Login() {
           "Access-Control-Allow-Origin": "*",
         },
       });
-      let user = jwt_decode(res.data.token);
+      
+      if (res.data.status === 0) {
+        setLoading(false)
+        toast.error(res.data.msg, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
+      } else {
+        setLoading(false)
+        localStorage.setItem("token", res.data.token);
+        dispatch({
+          type: "AUTHORIZE",
+          payload: localStorage.setItem("auth", true) === "true",
+        });
 
-      localStorage.setItem("name", user.name);
-      localStorage.setItem("email", user.email);
-      localStorage.setItem("phone", user.phone);
-      dispatch({ type: "TOKEN", payload: res.data.token });
-      dispatch({
-        type: "AUTHORIZE",
-        payload: localStorage.setItem("auth", true) === "true",
-      });
-
-      history.push("/profile");
+        history.push("/profile");
+      }
     } catch (error) {
-      console.log(error.message);
+      setLoading(false)
+      toast.error(error.message, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
     }
   };
   return (
     <div className="login">
+      {loading ? <Loading/> : null}
       <div className="form">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
         <Brand />
         <div>
           <Form className="login-form">
