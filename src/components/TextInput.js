@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import { Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import NameValidator from "../services/NameValidator"
-import PhoneValidator from "../services/PhoneValidator"
+import {NameValidator, PhoneValidator} from "../services"
 
 export default function TextInput(props) {
   const [valid, setValid] = useState(false)

@@ -1,17 +1,11 @@
 import React, { useState } from "react";
-import Brand from "../components/Brand";
+import {Brand, FormButtonFill, FormButtonOutline, EmailInput, PasswordInput, TextInput, Loading} from "../components";
 import { Form } from "react-bootstrap";
-import FormButtonOutline from "../components/FormButtonOutline";
-import FormButtonFill from "../components/FormButtonFill";
-import PasswordInput from "../components/PasswordInput";
-import EmailInput from "../components/EmailInput";
-import TextInput from "../components/TextInput";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Loading from "../components/Loading";
 
 export default function Register() {
   const [loading, setLoading] = useState(false)

@@ -3,7 +3,7 @@ import { Form } from "react-bootstrap";
 import Eye1 from "../images/Suche03.svg";
 import Eye2 from "../images/Suche04.svg";
 import { useDispatch} from "react-redux";
-import PasswordValidator from "../services/PasswordValidator"
+import {PasswordValidator} from "../services"
 
 export default function PasswordInput(props) {
   const [valid, setValid] = useState(false)

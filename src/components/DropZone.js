@@ -33,9 +33,10 @@ export default function DropZone() {
               "Access-Control-Allow-Origin": "*",
             },
           });
+
         })
         .then(() => {
-          toast.success("🦄 Baam! Reload page to view new picture!", {
+          toast.success("🦄 Baam! Login again to view new picture!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
