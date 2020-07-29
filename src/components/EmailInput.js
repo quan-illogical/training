@@ -1,10 +1,9 @@
 import React, {useState} from "react";
 import { Form } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import EmailValidator from "../services/EmailValidator"
 
 export default function EmailInput(props) {
-  const state = useSelector(state => state )
   const [valid, setValid] = useState(false)
   const [invalid, setInvalid] = useState(false)
   const dispatch = useDispatch();
@@ -29,7 +28,7 @@ export default function EmailInput(props) {
             type: dispatchType,
             payload: e.target.value,
           });
-          if (EmailValidator({str: state.email})) {
+          if (EmailValidator({str: e.target.value})) {
             setValid(true)
             setInvalid(false)
           } else {

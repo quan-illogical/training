@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import Eye1 from "../images/Suche03.svg";
 import Eye2 from "../images/Suche04.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch} from "react-redux";
+import PasswordValidator from "../services/PasswordValidator"
 
 export default function PasswordInput(props) {
+  const [valid, setValid] = useState(false)
+  const [invalid, setInvalid] = useState(false)
   const dispatch = useDispatch();
   let dispatchType = props.dispatchType;
   const [visible, setVisible] = useState(false);
@@ -26,10 +29,10 @@ export default function PasswordInput(props) {
         </p>
       </Form.Label>
       <Form.Control
-        isValid={props.isValid || false}
-        isInvalid={props.isInvalid || false}
+        isValid={props.isValid || valid}
+        isInvalid={props.isInvalid || invalid}
         required
-        className={props.className || "base key"}
+        className={props.className || "base key "+ (valid ? "valid" : (invalid ? "invalid" : null))}
         type={visible ? "text" : "password"}
         placeholder={props.placeholder || "Enter your password"}
         defaultValue={props.defaultValue || null}
@@ -40,6 +43,13 @@ export default function PasswordInput(props) {
               type: dispatchType,
               payload: e.target.value,
             });
+            if (PasswordValidator({input: e.target.value})) {
+              setValid(true)
+              setInvalid(false)
+            } else {
+              setValid(false);
+              setInvalid(true);
+            }
           })
         }
       />

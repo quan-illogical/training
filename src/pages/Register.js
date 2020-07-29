@@ -8,7 +8,7 @@ import EmailInput from "../components/EmailInput";
 import TextInput from "../components/TextInput";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function Register() {
   const state = useSelector((state) => state);
@@ -49,7 +49,6 @@ export default function Register() {
           if (res) {
             history.push("/login");
           }
-          
         }
       } catch (error) {
         alert(error.message);
@@ -87,6 +86,7 @@ export default function Register() {
               dispatchType="NAME"
             />
             <TextInput
+              phone={true}
               error="Please enter a phone number"
               label="Phone"
               placeholder="Enter your phone number"
