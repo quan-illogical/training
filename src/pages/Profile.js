@@ -1,12 +1,25 @@
 import React, { useState } from "react";
 import { Navbar, Form, Container, Row, Col } from "react-bootstrap";
-import {TextInput, EmailInput, PasswordInput, FormButtonFill, FormButtonOutline, UploadModal} from "../components";
+import {
+  TextInput,
+  EmailInput,
+  PasswordInput,
+  FormButtonFill,
+  FormButtonOutline,
+  UploadModal,
+  Loading,
+} from "../components";
 import profile_photo from "../images/meme-doge.jpg";
 import profile_btn from "../images/edit_photo.svg";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import {NameValidator, EmailValidator, PhoneValidator, PasswordValidator} from "../services";
+import {
+  NameValidator,
+  EmailValidator,
+  PhoneValidator,
+  PasswordValidator,
+} from "../services";
 import jwt_decode from "jwt-decode";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,6 +29,7 @@ export default function Profile() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const [disabled, setDisabled] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState(false);
 
   const token = localStorage.getItem("token");
@@ -53,6 +67,7 @@ export default function Profile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const { currentPassword, newPassword, confirmPassword } = user;
 
     if (
@@ -80,8 +95,17 @@ export default function Profile() {
               "Access-Control-Allow-Origin": "*",
             },
           });
-
-          console.log(res);
+          if (res.data.status === 1) {
+            toast.success(res.data.msg, {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
         } catch (error) {
           toast.error(error.message, {
             position: "top-center",
@@ -115,7 +139,7 @@ export default function Profile() {
               "Access-Control-Allow-Origin": "*",
             },
           });
-          if (res.status === 1) {
+          if (res.data.status === 1) {
             toast.success("Successfully changed password", {
               position: "top-center",
               autoClose: 5000,
@@ -124,6 +148,7 @@ export default function Profile() {
               pauseOnHover: true,
               draggable: true,
               progress: undefined,
+              onClose: history.go()
             });
           } else
             toast.error("Password is incorrect", {
@@ -158,10 +183,13 @@ export default function Profile() {
         });
       }
     }
+
+    setLoading(false);
   };
 
   return (
     <div>
+      {loading ? <Loading /> : null}
       <ToastContainer
         position="top-center"
         autoClose={5000}

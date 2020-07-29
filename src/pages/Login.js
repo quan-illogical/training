@@ -55,7 +55,7 @@ export default function Login() {
       }
     } catch (error) {
       setLoading(false)
-      toast.error(error.message, {
+      toast.error("Incorrect email or password", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
