@@ -9,16 +9,13 @@ import {
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
-import { useSelector, useDispatch } from "react-redux";
 import store from "./redux/store"
 
 
 function App() {
-  const dispatch = useDispatch()
-  const user = useSelector((state) => state.user);
 
   const ProtectedRoute = (props) => {
-    if (user.isAuthenticated === true) {
+    if (localStorage.getItem("auth")==="true") {
       return <Route {...props} />;
     } else {
       return <Redirect to="/login" />;
@@ -26,7 +23,6 @@ function App() {
   };
 
   useEffect(()=> {
-    // dispatch({type: "AUTHORIZE", payload: localStorage.getItem(auth)})
     console.log(store.getState().user)
   })
 

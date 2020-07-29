@@ -12,6 +12,8 @@ export default function TextInput(props) {
       </Form.Label>
       <Form.Control
         required
+        isValid = {props.isValid || false}
+        isInvalid = {props.isInvalid || false}
         className={props.className || "base email"}
         type="text"
         placeholder={props.placeholder || "Enter your text"}

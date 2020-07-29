@@ -8,10 +8,9 @@ import EmailInput from "../components/EmailInput";
 import TextInput from "../components/TextInput";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 
 export default function Register() {
-  const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const [validated, setValidated] = useState(false);
   let history = useHistory();
@@ -46,19 +45,6 @@ export default function Register() {
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
             },
-          });
-          dispatch({ type: "PROFILE-NAME", payload: state.user.name });
-          dispatch({
-            type: "PROFILE-EMAIL",
-            payload: state.user.email,
-          });
-          dispatch({
-            type: "PROFILE-PHONE",
-            payload: state.user.phone,
-          });
-          dispatch({
-            type: "AUTHORIZE",
-            payload: localStorage.getItem("auth" + res.data.id),
           });
           if (res) {
             history.push("/login");

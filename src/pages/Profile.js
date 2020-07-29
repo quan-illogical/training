@@ -7,26 +7,56 @@ import profile_photo from "../images/meme-doge.jpg";
 import FormButtonFill from "../components/FormButtonFill";
 import FormButtonOutline from "../components/FormButtonOutline";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
+import NameValidator from "../services/NameValidator";
+import EmailValidator from "../services/EmailValidator";
+import PhoneValidator from "../services/PhoneValidator";
+import PasswordValidator from "../services/PasswordValidator";
 
 export default function Profile() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const [disabled, setDisabled] = useState(true);
   const [validated, setValidated] = useState(false);
+
+  const userName = localStorage.getItem("name");
+  const userEmail = localStorage.getItem("email");
+  const userPhone = localStorage.getItem("phone");
 
   const handleChange = (e, dispatchType) => {
     dispatch({
       type: dispatchType,
       payload: e.target.value,
     });
-    setDisabled(false);
+    if (
+      NameValidator({ str: user.name }) &&
+      EmailValidator({ str: user.email }) &&
+      PhoneValidator({ input: user.phone }) &&
+      PasswordValidator({ input: user.currentPassword }) &&
+      PasswordValidator({ input: user.newPassword }) &&
+      PasswordValidator({ input: user.confirmPassword })
+    ) {
+      setDisabled(false);
+    } else setDisabled(true);
+  };
+
+  const handleOutlineClick = () => {
+    localStorage.clear();
+    history.push("/login");
   };
 
   const handleSubmit = async (e) => {
-    const { currentPassword, newPassword, confirmPassword } = user;
     e.preventDefault();
-    if (user.name !== "" && user.email !== "" && user.phone !== "") {
+    const { currentPassword, newPassword, confirmPassword } = user;
+    setValidated(true);
+
+    if (
+      user.name !== userName &&
+      user.email !== userEmail &&
+      user.phone !== userPhone
+    ) {
       const res = await axios({
         method: "patch",
         url: process.env.REACT_APP_UPDATE,
@@ -41,16 +71,36 @@ export default function Profile() {
           "Access-Control-Allow-Origin": "*",
         },
       });
-      setValidated(true);
-      if (
-        currentPassword !== "" &&
-        newPassword !== "" &&
-        confirmPassword !== ""
-      ) {
-        // if (currentPassword === )
-      }
+
       console.log(res);
-    } else console.log("Submitted");
+    }
+    if (
+      currentPassword !== "" &&
+      newPassword !== "" &&
+      confirmPassword !== ""
+    ) {
+      if (newPassword === confirmPassword) {
+        const res = await axios({
+          method: "post",
+          url: process.env.REACT_APP_CHANGE_PASSWORD,
+          data: {
+            password: newPassword,
+            currentPassword: currentPassword,
+          },
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+        if (res.status === 1) {
+          alert("Successfully changed password");
+        } else alert("Wrong password");
+        console.log(res);
+      } else {
+        alert("New password and confirm password must match");
+      }
+    }
   };
 
   return (
@@ -77,7 +127,7 @@ export default function Profile() {
                 console.log("Hey");
               }}
             ></div>
-            <h1>{user.name || null}</h1>
+            <h1>{userName || null}</h1>
           </div>
 
           <Row noGutters={true}>
@@ -89,7 +139,7 @@ export default function Profile() {
                 className_label="profile-input-label"
                 label="Full name"
                 placeholder="Enter your full name"
-                defaultValue={user.name}
+                defaultValue={userName}
               />
             </Col>
           </Row>
@@ -99,8 +149,8 @@ export default function Profile() {
               <EmailInput
                 className="profile-input"
                 className_label="profile-input-label"
-                onChange={(e) => handleChange(e, "PROFILE-MAIL")}
-                defaultValue={user.email}
+                onChange={(e) => handleChange(e, "PROFILE-EMAIL")}
+                defaultValue={userEmail}
               />
             </Col>
             <Col xl={6}>
@@ -110,7 +160,7 @@ export default function Profile() {
                 label="Phone"
                 placeholder="Enter your phone"
                 onChange={(e) => handleChange(e, "PROFILE-PHONE")}
-                defaultValue={user.phone}
+                defaultValue={userPhone}
               />
             </Col>
           </Row>
@@ -172,7 +222,12 @@ export default function Profile() {
               content="Save"
               class="btn-profile-fill"
             />
-            <FormButtonOutline content="Log out" class="btn-profile-outline" />
+            <FormButtonOutline
+              onClick={() => handleOutlineClick()}
+              type="button"
+              content="Log out"
+              class="btn-profile-outline"
+            />
           </div>
         </Container>
       </Form>

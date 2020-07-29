@@ -26,17 +26,22 @@ export default function PasswordInput(props) {
         </p>
       </Form.Label>
       <Form.Control
+        isValid={props.isValid || false}
+        isInvalid={props.isInvalid || false}
         required
         className={props.className || "base key"}
         type={visible ? "text" : "password"}
         placeholder={props.placeholder || "Enter your password"}
         defaultValue={props.defaultValue || null}
-        onChange={props.onChange || ((e) => {
-          dispatch({
-            type: dispatchType,
-            payload: e.target.value,
-          });
-        })}
+        onChange={
+          props.onChange ||
+          ((e) => {
+            dispatch({
+              type: dispatchType,
+              payload: e.target.value,
+            });
+          })
+        }
       />
       <EyeIcon />
       <Form.Control.Feedback type="invalid">

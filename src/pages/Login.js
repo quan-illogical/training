@@ -34,19 +34,16 @@ export default function Login() {
         },
       });
       let user = jwt_decode(res.data.token);
-      localStorage.setItem("auth", true)
-      dispatch({type: "TOKEN", payload: res.data.token})
-      dispatch({ type: "PROFILE-NAME", payload: user.name });
+
+      localStorage.setItem("name", user.name);
+      localStorage.setItem("email", user.email);
+      localStorage.setItem("phone", user.phone);
+      dispatch({ type: "TOKEN", payload: res.data.token });
       dispatch({
-        type: "PROFILE-EMAIL",
-        payload: user.email,
+        type: "AUTHORIZE",
+        payload: localStorage.setItem("auth", true) === "true",
       });
-      dispatch({
-        type: "PROFILE-PHONE",
-        payload: user.phone,
-      });
-      dispatch({ type: "AUTHORIZE", payload: localStorage.getItem("auth") === "true" });
-      
+
       history.push("/profile");
     } catch (error) {
       console.log(error.message);
