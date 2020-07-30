@@ -56,9 +56,10 @@ export default function Register() {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
+            onClose: () => history.push("/login")
             });
-          history.push("/login");
-        } else toast.error("Must not leave any field empty", {
+          
+        } else toast.error(res.data.msg, {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,

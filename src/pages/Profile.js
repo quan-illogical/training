@@ -11,7 +11,7 @@ import {
 } from "../components";
 import profile_photo from "../images/meme-doge.jpg";
 import profile_btn from "../images/edit_photo.svg";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import {
@@ -26,35 +26,19 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function Profile() {
   const history = useHistory();
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const [disabled, setDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState(false);
 
   const token = localStorage.getItem("token");
   const decoded = jwt_decode(token);
-  const userName = decoded.name;
-  const userEmail = decoded.email;
-  const userPhone = decoded.phone;
+  localStorage.setItem("name", decoded.name);
+  localStorage.setItem("email", decoded.email);
+  localStorage.setItem("phone", decoded.phone);
+  const userName = localStorage.getItem("name");
+  const userEmail = localStorage.getItem("email");
+  const userPhone = localStorage.getItem("phone");
   const userPic = decoded.avatar;
-
-  const handleChange = (e, dispatchType) => {
-    dispatch({
-      type: dispatchType,
-      payload: e.target.value,
-    });
-    if (
-      (NameValidator({ str: user.name }) &&
-        EmailValidator({ str: user.email }) &&
-        PhoneValidator({ input: user.phone })) ||
-      (PasswordValidator({ input: user.currentPassword }) &&
-        PasswordValidator({ input: user.newPassword }) &&
-        PasswordValidator({ input: user.confirmPassword }))
-    ) {
-      setDisabled(false);
-    } else setDisabled(true);
-  };
 
   const handleOutlineClick = () => {
     localStorage.clear();
@@ -71,23 +55,23 @@ export default function Profile() {
     const { currentPassword, newPassword, confirmPassword } = user;
 
     if (
-      user.name !== userName &&
-      user.email !== userEmail &&
+      user.name !== userName ||
+      user.email !== userEmail ||
       user.phone !== userPhone
     ) {
       if (
-        NameValidator({ str: user.name }) &&
-        EmailValidator({ str: user.email }) &&
-        PhoneValidator({ input: user.phone })
+        NameValidator({ str: user.name === "" ? userName : user.name }) &&
+        EmailValidator({ str: user.email === "" ? userEmail : user.email }) &&
+        PhoneValidator({ input: user.phone === "" ? userPhone : user.phone })
       ) {
         try {
           const res = await axios({
             method: "patch",
             url: process.env.REACT_APP_UPDATE,
             data: {
-              name: user.name,
-              email: user.email,
-              phone: user.phone,
+              name: user.name === "" ? userName : user.name,
+              email: user.email === "" ? userEmail : user.email,
+              phone: user.phone === "" ? userPhone : user.phone,
             },
             headers: {
               Authorization: `Bearer ${token}`,
@@ -96,7 +80,7 @@ export default function Profile() {
             },
           });
           if (res.data.status === 1) {
-            toast.success(res.data.msg, {
+            toast.success(res.data.msg + "\n Please login again to apply changes", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -104,6 +88,10 @@ export default function Profile() {
               pauseOnHover: true,
               draggable: true,
               progress: undefined,
+              onClose: () => {
+                localStorage.clear()
+                history.go();
+              },
             });
           }
         } catch (error) {
@@ -122,7 +110,8 @@ export default function Profile() {
     if (
       currentPassword !== "" &&
       newPassword !== "" &&
-      confirmPassword !== ""
+      confirmPassword !== "" &&
+      PasswordValidator({ input: user.newPassword })
     ) {
       try {
         if (newPassword === confirmPassword) {
@@ -148,7 +137,7 @@ export default function Profile() {
               pauseOnHover: true,
               draggable: true,
               progress: undefined,
-              onClose: history.go()
+              onClose: () => history.go(),
             });
           } else
             toast.error("Password is incorrect", {
@@ -233,7 +222,7 @@ export default function Profile() {
             <Col xl={6}>
               <TextInput
                 error={null}
-                onChange={(e) => handleChange(e, "PROFILE-NAME")}
+                dispatchType="PROFILE-NAME"
                 className="profile-input"
                 className_label="profile-input-label"
                 label="Full name"
@@ -248,7 +237,7 @@ export default function Profile() {
               <EmailInput
                 className="profile-input"
                 className_label="profile-input-label"
-                onChange={(e) => handleChange(e, "PROFILE-EMAIL")}
+                dispatchType="PROFILE-EMAIL"
                 defaultValue={userEmail}
               />
             </Col>
@@ -257,8 +246,9 @@ export default function Profile() {
                 className="profile-input"
                 className_label="profile-input-label"
                 label="Phone"
+                phone
                 placeholder="Enter your phone"
-                onChange={(e) => handleChange(e, "PROFILE-PHONE")}
+                dispatchType="PROFILE-PHONE"
                 defaultValue={userPhone}
               />
             </Col>
@@ -286,7 +276,7 @@ export default function Profile() {
                 className_label="profile-input-label"
                 label="Current password"
                 placeholder="Enter your password"
-                onChange={(e) => handleChange(e, "PROFILE-CURRENT-PASSWORD")}
+                dispatchType="PROFILE-CURRENT-PASSWORD"
               />
             </Col>
           </Row>
@@ -298,7 +288,7 @@ export default function Profile() {
                 className_label="profile-input-label"
                 label="New password"
                 placeholder="Enter your new password"
-                onChange={(e) => handleChange(e, "PROFILE-NEW-PASSWORD")}
+                dispatchType="PROFILE-NEW-PASSWORD"
               />
             </Col>
             <Col xl={6}>
@@ -307,7 +297,7 @@ export default function Profile() {
                 className_label="profile-input-label"
                 label="Confirm password"
                 placeholder="Enter your password"
-                onChange={(e) => handleChange(e, "PROFILE-CONFIRM-PASSWORD")}
+                dispatchType="PROFILE-CONFIRM-PASSWORD"
               />
             </Col>
           </Row>
@@ -317,7 +307,6 @@ export default function Profile() {
             <FormButtonFill
               onClick={(e) => handleSubmit(e)}
               type="submit"
-              disabled={disabled}
               content="Save"
               class="btn-profile-fill"
             />
