@@ -1,6 +1,6 @@
 import React from 'react'
 import {Modal, Button} from "react-bootstrap"
-import DropZone from './DropZone'
+import DropZone from '../DropZone/DropZone'
 
 export default function UploadModal(props) {
     return (

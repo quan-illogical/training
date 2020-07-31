@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {Brand, FormButtonFill, FormButtonOutline, EmailInput, PasswordInput, FormCheckBox, Loading} from "../components";
 import { Form } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -10,7 +10,6 @@ import "react-toastify/dist/ReactToastify.css";
 export default function Login() {
   const [loading, setLoading] = useState(false)
   const history = useHistory();
-  const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const handleOutlineClick = () => {
     history.push("/register");
@@ -46,11 +45,7 @@ export default function Login() {
       } else {
         setLoading(false)
         localStorage.setItem("token", res.data.token);
-        dispatch({
-          type: "AUTHORIZE",
-          payload: localStorage.setItem("auth", true) === "true",
-        });
-
+        localStorage.setItem("auth", true);
         history.push("/profile");
       }
     } catch (error) {

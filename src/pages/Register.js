@@ -98,7 +98,7 @@ export default function Register() {
           draggable
           pauseOnHover
         />
-        <Brand />
+        <Brand title="Register a new account" />
         <div>
           <Form onSubmit={handleFillClick} className="register-form">
             <EmailInput error="Email is invalid" dispatchType="EMAIL" />

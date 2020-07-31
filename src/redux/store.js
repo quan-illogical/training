@@ -2,14 +2,12 @@ import { createStore } from "redux";
 
 const initialState = {
   user: {
-    isAuthenticated: false,
     email: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
     name: "",
     phone: "",
-    token: "",
   },
   email: "",
   password: "",
@@ -18,7 +16,7 @@ const initialState = {
   phone: "",
 };
 
-function reducer(state = initialState, action) {
+export function reducer(state = initialState, action) {
   if (action.type === "NAME") {
     state.name = action.payload;
   }
@@ -51,12 +49,6 @@ function reducer(state = initialState, action) {
   }
   if (action.type === "PROFILE-CONFIRM-PASSWORD") {
     state.user.confirmPassword = action.payload;
-  }
-  if (action.type === "AUTHORIZE") {
-    state.user.isAuthenticated = action.payload;
-  }
-  if (action.type === "TOKEN") {
-    state.user.token = action.payload;
   }
   return state;
 }

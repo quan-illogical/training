@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import {EmailValidator} from "../services"
+import {EmailValidator} from "../../services"
 
 export default function EmailInput(props) {
   const [valid, setValid] = useState(false)

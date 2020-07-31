@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Brand should render Brand correctly 1`] = `
+<div
+  className="brand-component"
+>
+  <img
+    alt="Logo"
+    src="brand-logo.svg"
+  />
+  <b>
+    START YOUR PERSONAL PHOTO EXPERIENCE
+  </b>
+  <h5>
+    Login Your Account
+  </h5>
+</div>
+`;
