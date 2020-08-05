@@ -87,10 +87,6 @@ export default function Profile() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                onClose: () => {
-                  localStorage.clear()
-                  history.go();
-                },
               }
             );
           }
