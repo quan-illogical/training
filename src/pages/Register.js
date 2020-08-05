@@ -99,7 +99,6 @@ export default function Register() {
           pauseOnHover
         />
         <Brand title="Register a new account" />
-        <div>
           <Form onSubmit={handleFillClick} className="register-form">
             <EmailInput error="Email is invalid" dispatchType="EMAIL" />
             <PasswordInput
@@ -136,7 +135,6 @@ export default function Register() {
               />
             </div>
           </Form>
-        </div>
       </div>
       <img
         className="solution-experts"

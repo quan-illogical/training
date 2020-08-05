@@ -80,19 +80,22 @@ export default function Profile() {
             },
           });
           if (res.data.status === 1) {
-            toast.success(res.data.msg + "\n Please login again to apply changes", {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              onClose: () => {
-                localStorage.clear()
-                history.go();
-              },
-            });
+            toast.success(
+              "Personal infromation has been updated. Please login again to apply changes",
+              {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                onClose: () => {
+                  localStorage.clear()
+                  history.go();
+                },
+              }
+            );
           }
         } catch (error) {
           toast.error(error.message, {
