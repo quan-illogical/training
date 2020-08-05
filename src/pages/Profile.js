@@ -32,12 +32,9 @@ export default function Profile() {
 
   const token = localStorage.getItem("token");
   const decoded = jwt_decode(token);
-  localStorage.setItem("name", decoded.name);
-  localStorage.setItem("email", decoded.email);
-  localStorage.setItem("phone", decoded.phone);
-  const userName = localStorage.getItem("name");
-  const userEmail = localStorage.getItem("email");
-  const userPhone = localStorage.getItem("phone");
+  const userName = decoded.name;
+  const userEmail = decoded.email;
+  const userPhone = decoded.phone;
   const userPic = decoded.avatar;
 
   const handleOutlineClick = () => {
