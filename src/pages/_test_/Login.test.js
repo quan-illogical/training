@@ -1,10 +1,22 @@
 import React from 'react'
-import {shallow} from 'enzyme'
+import {mount} from 'enzyme'
 import Login from "../Login"
 
-describe("Login", () => {
-    it("should render", () => {
-        const wrapper = shallow(<Login/>)
-        expect(wrapper.exists()).toBe(true)
-    })
-})
+import configureStore from "redux-mock-store";
+import { Provider } from "react-redux";
+
+const mockStore = configureStore();
+const store = mockStore();
+
+describe("Login page", () => {
+    it("render correctly", () => {
+      const wrapper = mount(
+        <Provider store={store}>
+          <Login />
+        </Provider>
+      );
+  
+      expect(wrapper.exists()).toEqual(true);
+    });
+    
+  });

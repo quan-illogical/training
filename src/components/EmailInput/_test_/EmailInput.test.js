@@ -18,23 +18,6 @@ describe("Email Input", () => {
 
     expect(wrapper.exists()).toEqual(true);
   });
-  // it("should have porper props", () => {
-  //   const wrapper = mount(
-  //     <Provider store={store}>
-  //       <EmailInput />
-  //     </Provider>
-  //   );
-  //   expect(wrapper.find('FormControl').props()).toEqual({
-  //     isValid: false,
-  //     isInvalid: false,
-  //     required: true,
-  //     defaultValue: null,
-  //     className: 'base email ' + null,
-  //     type: "email",
-  //     placeholder: "Enter your email",
-  //     onChange={} function(){}
-  //   })
-  // });
 });
 
 describe("Dispatch", () => {
@@ -70,5 +53,22 @@ describe("Dispatch", () => {
     expect(store.getActions()).toEqual([
       { type: "EMAIL", payload: "testing 2" },
     ]);
+  });
+
+  it("function works correctly", () => {
+    const changeValid = jest.fn();
+    const changeInvalid = jest.fn();
+    const wrapper = mount(
+      <Provider store={store}>
+        <EmailInput onChange={changeValid} />
+      </Provider>
+    );
+    const handleChange = jest.spyOn(React, "useState")
+    handleChange.mockImplementation(valid => [valid, changeValid]);
+
+    console.log(wrapper.find("FormControl").props())
+
+    wrapper.find("FormControl").simulate("change", { target: { value: "testing@gmail.com" } })
+    expect(changeValid).toBeTruthy();
   });
 });

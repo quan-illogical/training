@@ -9,7 +9,7 @@ import {
   UploadModal,
   Loading,
 } from "../components";
-import profile_photo from "../images/meme-doge.jpg";
+import profile_photo from "../images/profile.png";
 import profile_btn from "../images/edit_photo.svg";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -32,12 +32,9 @@ export default function Profile() {
 
   const token = localStorage.getItem("token");
   const decoded = jwt_decode(token);
-  localStorage.setItem("name", decoded.name);
-  localStorage.setItem("email", decoded.email);
-  localStorage.setItem("phone", decoded.phone);
-  const userName = localStorage.getItem("name");
-  const userEmail = localStorage.getItem("email");
-  const userPhone = localStorage.getItem("phone");
+  const userName = decoded.name;
+  const userEmail = decoded.email;
+  const userPhone = decoded.phone;
   const userPic = decoded.avatar;
 
   const handleOutlineClick = () => {
@@ -80,19 +77,18 @@ export default function Profile() {
             },
           });
           if (res.data.status === 1) {
-            toast.success(res.data.msg + "\n Please login again to apply changes", {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              onClose: () => {
-                localStorage.clear()
-                history.go();
-              },
-            });
+            toast.success(
+              "Personal infromation has been updated. Please login again to apply changes",
+              {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              }
+            );
           }
         } catch (error) {
           toast.error(error.message, {

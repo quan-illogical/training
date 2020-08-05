@@ -1,10 +1,22 @@
 import React from 'react'
-import {shallow} from 'enzyme'
+import {mount} from 'enzyme'
 import Register from "../Register"
 
-describe("Register", () => {
-    it("should render", () => {
-        const wrapper = shallow(<Register/>)
-        expect(wrapper.exists()).toBe(true)
-    })
-})
+import configureStore from "redux-mock-store";
+import { Provider } from "react-redux";
+
+const mockStore = configureStore();
+const store = mockStore();
+
+describe("Register page", () => {
+    it("render correctly", () => {
+      const wrapper = mount(
+        <Provider store={store}>
+          <Register />
+        </Provider>
+      );
+  
+      expect(wrapper.exists()).toEqual(true);
+    });
+    
+  });
