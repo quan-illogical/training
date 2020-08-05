@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import {Brand, FormButtonFill, FormButtonOutline, EmailInput, PasswordInput, TextInput, Loading} from "../components";
+import {
+  Brand,
+  FormButtonFill,
+  FormButtonOutline,
+  EmailInput,
+  PasswordInput,
+  TextInput,
+  Loading,
+} from "../components";
 import { Form } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
@@ -8,7 +16,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Register() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const state = useSelector((state) => state);
   let history = useHistory();
 
@@ -19,9 +27,15 @@ export default function Register() {
   const handleFillClick = async (e) => {
     try {
       e.preventDefault();
-      setLoading(true)
-      if (state.password !== state.confirmPassword) {
-        toast.error("Confirm password does not match with password. Please try again", {
+      setLoading(true);
+      if (
+        state.password === "" &&
+        state.confirmPassword === "" &&
+        state.email === "" &&
+        state.name === "" &&
+        state.phone === ""
+      ) {
+        toast.error("You have to fill all the requirements below", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -29,8 +43,22 @@ export default function Register() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          });
-          setLoading(false)
+        });
+        setLoading(false);
+      } else if (state.password !== state.confirmPassword) {
+        toast.error(
+          "Confirm password does not match with password. Please try again",
+          {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        );
+        setLoading(false);
       } else {
         const res = await axios({
           method: "post",
@@ -46,9 +74,9 @@ export default function Register() {
             "Access-Control-Allow-Origin": "*",
           },
         });
-        setLoading(false)
+        setLoading(false);
         if (res.data.status === 1) {
-          toast.success('Successfully created an account!', {
+          toast.success("Successfully created an account!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -56,21 +84,21 @@ export default function Register() {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            onClose: () => history.push("/login")
-            });
-          
-        } else toast.error(res.data.msg, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          });;
+            onClose: () => history.push("/login"),
+          });
+        } else
+          toast.error(res.data.msg, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
       }
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       toast.error(error.message, {
         position: "top-center",
         autoClose: 5000,
@@ -86,7 +114,7 @@ export default function Register() {
   return (
     <div className="register">
       <div className="form">
-        {loading ? <Loading/> : null}
+        {loading ? <Loading /> : null}
         <ToastContainer
           position="top-center"
           autoClose={5000}
@@ -99,42 +127,42 @@ export default function Register() {
           pauseOnHover
         />
         <Brand title="Register a new account" />
-          <Form onSubmit={handleFillClick} className="register-form">
-            <EmailInput error="Email is invalid" dispatchType="EMAIL" />
-            <PasswordInput
-              error="Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
-              dispatchType="PASSWORD"
+        <Form onSubmit={handleFillClick} className="register-form">
+          <EmailInput error="Email is invalid" dispatchType="EMAIL" />
+          <PasswordInput
+            error="Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+            dispatchType="PASSWORD"
+          />
+          <PasswordInput
+            error="Invalid confirmation"
+            label="Confirm Password"
+            dispatchType="CONFIRM_PASSWORD"
+          />
+          <TextInput
+            error="Please enter your name"
+            label="Full Name"
+            placeholder="Enter your name"
+            dispatchType="NAME"
+          />
+          <TextInput
+            phone={true}
+            error="Please enter a phone number"
+            label="Phone"
+            placeholder="Enter your phone number"
+            dispatchType="PHONE"
+          />
+          <div className="form-buttons">
+            <FormButtonOutline
+              content="Back"
+              onClick={(e) => handleOutlineClick(e)}
+              type="button"
             />
-            <PasswordInput
-              error="Invalid confirmation"
-              label="Confirm Password"
-              dispatchType="CONFIRM_PASSWORD"
+            <FormButtonFill
+              content="Submit"
+              onClick={(e) => handleFillClick(e)}
             />
-            <TextInput
-              error="Please enter your name"
-              label="Full Name"
-              placeholder="Enter your name"
-              dispatchType="NAME"
-            />
-            <TextInput
-              phone={true}
-              error="Please enter a phone number"
-              label="Phone"
-              placeholder="Enter your phone number"
-              dispatchType="PHONE"
-            />
-            <div className="form-buttons">
-              <FormButtonOutline
-                content="Back"
-                onClick={(e) => handleOutlineClick(e)}
-                type="button"
-              />
-              <FormButtonFill
-                content="Submit"
-                onClick={(e) => handleFillClick(e)}
-              />
-            </div>
-          </Form>
+          </div>
+        </Form>
       </div>
       <img
         className="solution-experts"
