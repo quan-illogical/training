@@ -9,7 +9,7 @@ import {
   UploadModal,
   Loading,
 } from "../components";
-import profile_photo from "../images/meme-doge.jpg";
+import profile_photo from "../images/profile.png";
 import profile_btn from "../images/edit_photo.svg";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
